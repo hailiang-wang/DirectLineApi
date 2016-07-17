@@ -28,7 +28,7 @@ DirectLineClient.prototype.getToken = function(secret) {
             error: err
         });
         if (response.statusCode === 200) {
-            return defer.resolve(body);
+            return defer.resolve(body.slice(1, -1));
         } else {
             return defer.reject({
                 rc: 2,
@@ -89,9 +89,9 @@ DirectLineClient.prototype.postMessage = function(token, conversationId, message
             'Content-Type': 'application/json'
         },
         json: true,
-        body: JSON.stringify({
+        body: {
             text: message
-        })
+        }
     }, function(err, response, body) {
         if (err) return defer.reject({
             rc: 1,
@@ -128,7 +128,6 @@ DirectLineClient.prototype.postFileMessage = function(token, conversationId, for
         },
         formData: formData
     }, function(err, response, body) {
-        console.log(response);
         if (err) return defer.reject({
             rc: 1,
             error: err
@@ -196,7 +195,7 @@ DirectLineClient.prototype.generateConversationAndToken = function(secret) {
         method: 'POST',
         uri: baseUrl + '/tokens/conversation',
         headers: {
-            'Authorization': 'BotConnector ' + token
+            'Authorization': 'BotConnector ' + secret
         }
     }, function(err, response, body) {
         if (err) return defer.reject({
