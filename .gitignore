@@ -1,0 +1,6 @@
+*sublime-*
+*.swp
+*.swo
+node_modules/
+test/conf.json
+DS_store
