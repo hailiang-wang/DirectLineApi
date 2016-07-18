@@ -138,3 +138,26 @@ test.cb('DirectLineAPI#postFileMessage', t => {
             t.end();
         });
 });
+
+test.only.cb('DirectLineAPI#ask', t => {
+    // check out form data format
+    // https://www.npmjs.com/package/request#multipartform-data-multipart-form-uploads
+    directLineAPI.getToken(conf.DIRECT_LINE_SECRET)
+        .then(function(token) {
+            return directLineAPI.createConversation(token);
+        })
+        .then(function(result) {
+            console.log('ask>> ' + JSON.stringify(result));
+            return directLineAPI.ask(result.conversationId, result.token, "sss");
+        })
+        .then(function(result) {
+            console.log(result);
+            t.pass();
+            t.end();
+        })
+        .fail(function(err) {
+            console.log(err);
+            t.fail();
+            t.end();
+        });
+});

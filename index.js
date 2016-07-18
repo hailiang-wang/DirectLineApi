@@ -5,7 +5,9 @@
 const baseUrl = "https://directline.botframework.com/api";
 var request = require('request');
 var Q = require('q');
-
+var _ = require('lodash');
+var leftpad = require('leftpad');
+var debug = require('debug')('directline-api');
 
 function DirectLineClient() {}
 
@@ -247,6 +249,67 @@ DirectLineClient.prototype.renewConversationToken = function(token, conversation
 
     return defer.promise;
 };
+
+/**
+ * [resolveNextConversationMessageId description]
+ * @param  {[type]} watermark [description]
+ * @return {[type]}           [description]
+ */
+function resolveNextConversationMessageId(conversationId, watermark) {
+    return conversationId + '|' + leftpad(watermark + 2, 18);
+}
+
+/**
+ * [ask description]
+ * @param  {[type]} conversationId [description]
+ * @param  {[type]} token          [description]
+ * @param  {[type]} content        [description]
+ * @return {[type]}                [description]
+ */
+DirectLineClient.prototype.ask = function(conversationId, token, content) {
+    var defer = Q.defer();
+    var self = this;
+    var data = {};
+    self.getMessages(token, conversationId)
+        .then(function(result) {
+            data.watermark = parseInt(result.watermark) | 0;
+            data.nextId = resolveNextConversationMessageId(conversationId, data.watermark);
+            return self.postMessage(token, conversationId, content);
+        })
+        .then(function() {
+
+            function waitForResponse(callback) {
+                setTimeout(function() {
+                    self.getMessages(token, conversationId, data.watermark)
+                        .then(function(result) {
+                            var isDone = false;
+                            _.each(result.messages, function(val, index) {
+                                if (val.id === data.nextId) {
+                                    isDone = true;
+                                    return callback(null, val);
+                                }
+                            });
+                            if (!isDone)
+                                waitForResponse(callback);
+                        }, function(err) {
+                            return callback(err);
+                        });
+                }, 500);
+            }
+
+            waitForResponse(function(err, response) {
+                if (err) return defer.reject(err);
+                debug('get response %j', JSON.stringify(response));
+                return defer.resolve(response);
+            });
+
+        })
+        .fail(function(err) {
+            defer.reject(err);
+        });
+
+    return defer.promise;
+}
 
 
 exports = module.exports = new DirectLineClient();
