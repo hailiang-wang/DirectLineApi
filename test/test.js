@@ -41,7 +41,9 @@ test.cb('DirectLineAPI#postMessage', t => {
             return directLineAPI.createConversation(token);
         })
         .then(function(result) {
-            return directLineAPI.postMessage(result.token, result.conversationId, 'timestamp#')
+            return directLineAPI.postMessage(result.token, result.conversationId, {
+                text: 'message'
+            });
         })
         .then(function(result) {
             t.pass();
@@ -139,7 +141,7 @@ test.cb('DirectLineAPI#postFileMessage', t => {
         });
 });
 
-test.only.cb('DirectLineAPI#ask', t => {
+test.cb('DirectLineAPI#ask', t => {
     // check out form data format
     // https://www.npmjs.com/package/request#multipartform-data-multipart-form-uploads
     directLineAPI.getToken(conf.DIRECT_LINE_SECRET)
@@ -152,6 +154,37 @@ test.only.cb('DirectLineAPI#ask', t => {
         })
         .then(function(result) {
             console.log(result);
+            t.pass();
+            t.end();
+        })
+        .fail(function(err) {
+            console.log(err);
+            t.fail();
+            t.end();
+        });
+});
+
+test.only.cb('DirectLineAPI#dialog', t => {
+    // check out form data format
+    // https://www.npmjs.com/package/request#multipartform-data-multipart-form-uploads
+    var data = {};
+    directLineAPI.getToken(conf.DIRECT_LINE_SECRET)
+        .then(function(token) {
+            return directLineAPI.createConversation(token);
+        })
+        .then(function(result) {
+            console.log('ask>> ' + JSON.stringify(result));
+            data.token = result.token;
+            data.conversationId = result.conversationId;
+            return directLineAPI.ask(result.token, result.conversationId, { text: 'bar' });
+        })
+        .then(function(result) {
+            console.log('dialog-1', JSON.stringify(result));
+            console.log('dialog-1:data', JSON.stringify(data))
+            return directLineAPI.ask(data.token, data.conversationId, { text: 'foo' });
+        })
+        .then(function(result) {
+            console.log('dialog-2', JSON.stringify(result));
             t.pass();
             t.end();
         })

@@ -81,7 +81,7 @@ DirectLineClient.prototype.createConversation = function(token) {
  * @param  {[type]} message        [description]
  * @return {[type]}                [description]
  */
-DirectLineClient.prototype.postMessage = function(token, conversationId, message) {
+DirectLineClient.prototype.postMessage = function(token, conversationId, body) {
     var defer = Q.defer();
     request({
         method: 'POST',
@@ -91,10 +91,8 @@ DirectLineClient.prototype.postMessage = function(token, conversationId, message
             'Content-Type': 'application/json'
         },
         json: true,
-        body: {
-            text: message
-        }
-    }, function(err, response, body) {
+        body: body
+    }, function(err, response) {
         if (err) return defer.reject({
             rc: 1,
             error: err
@@ -267,7 +265,7 @@ function resolveNextConversationMessageId(conversationId, watermark) {
  * @param  {[type]} content        [description]
  * @return {[type]}                [description]
  */
-DirectLineClient.prototype.ask = function(token, conversationId, content) {
+DirectLineClient.prototype.ask = function(token, conversationId, body) {
     var defer = Q.defer();
     var self = this;
     var data = {};
@@ -275,7 +273,7 @@ DirectLineClient.prototype.ask = function(token, conversationId, content) {
         .then(function(result) {
             data.watermark = parseInt(result.watermark) | 0;
             data.nextId = resolveNextConversationMessageId(conversationId, data.watermark);
-            return self.postMessage(token, conversationId, content);
+            return self.postMessage(token, conversationId, body);
         })
         .then(function() {
 
