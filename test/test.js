@@ -148,7 +148,7 @@ test.only.cb('DirectLineAPI#ask', t => {
         })
         .then(function(result) {
             console.log('ask>> ' + JSON.stringify(result));
-            return directLineAPI.ask(result.conversationId, result.token, "sss");
+            return directLineAPI.ask(result.token, result.conversationId, "sss");
         })
         .then(function(result) {
             console.log(result);

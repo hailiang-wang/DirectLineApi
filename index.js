@@ -266,7 +266,7 @@ function resolveNextConversationMessageId(conversationId, watermark) {
  * @param  {[type]} content        [description]
  * @return {[type]}                [description]
  */
-DirectLineClient.prototype.ask = function(conversationId, token, content) {
+DirectLineClient.prototype.ask = function(token, conversationId, content) {
     var defer = Q.defer();
     var self = this;
     var data = {};

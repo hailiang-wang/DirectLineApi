@@ -7,19 +7,22 @@ https://docs.botframework.com/en-us/restapi/directline/
 
 ```
 var client = require('directline-api');
+// get a token
 client.getToken(secret);
-
+// create a conversation
 client.createConversation(token);
-
+// post a message in a conversation
 client.postMessage(token, conversationId, message);
-
+// post a file in a conversation
 client.postFileMessage(token, conversationId, formData);
-
+// get messages in a conversation
 client.getMessages(token, conversationId, [watermark]);
-
+// generate a new conversation and token
 client.generateConversationAndToken(secret);
-
+// renew a token for a conversation
 client.renewConversationToken(token, conversationId);
+// request with a text and get response
+client.ask(token, conversationId, content);
 
 ```
 
