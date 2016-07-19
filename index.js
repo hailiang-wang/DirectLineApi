@@ -5,7 +5,6 @@
 const baseUrl = "https://directline.botframework.com/api";
 var request = require('request');
 var Q = require('q');
-var _ = require('lodash');
 var leftpad = require('leftpad');
 var debug = require('debug')('directline-api');
 
@@ -282,12 +281,13 @@ DirectLineClient.prototype.ask = function(token, conversationId, body) {
                     self.getMessages(token, conversationId, data.watermark)
                         .then(function(result) {
                             var isDone = false;
-                            _.each(result.messages, function(val, index) {
+                            result.messages.forEach(function(val, index) {
                                 if (val.id === data.nextId) {
                                     isDone = true;
                                     return callback(null, val);
                                 }
                             });
+
                             if (!isDone)
                                 waitForResponse(callback);
                         }, function(err) {

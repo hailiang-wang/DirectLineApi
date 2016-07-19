@@ -1,7 +1,7 @@
 {
   "name": "directline-api",
-  "version": "1.0.4",
-  "description": "Client Lib for Microsoft Botframework Direct Line API",
+  "version": "1.0.5",
+  "description": "Client for Microsoft Botframework Direct Line REST API",
   "main": "index.js",
   "scripts": {
     "test": "ava",
@@ -12,7 +12,10 @@
     "url": "git+ssh://git@github.com/rockq-org/DirectLineApi.git"
   },
   "keywords": [
-    "botframework"
+    "botframework",
+    "bot",
+    "chatbots",
+    "directline"
   ],
   "author": "hailiang.hl.wang@gmail.com",
   "license": "MIT",
@@ -21,14 +24,14 @@
   },
   "homepage": "https://github.com/rockq-org/DirectLineApi#readme",
   "devDependencies": {
-    "ava": "^0.15.2"
+    "ava": "^0.15.2",
+    "shortid": "^2.2.6"
   },
   "dependencies": {
     "debug": "^2.2.0",
     "leftpad": "0.0.0",
     "lodash": "^4.13.1",
     "q": "^1.4.1",
-    "request": "^2.73.0",
-    "superagent": "^2.1.0"
+    "request": "^2.73.0"
   }
 }

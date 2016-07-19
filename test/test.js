@@ -2,6 +2,7 @@ var test = require('ava');
 var directLineAPI = require('../');
 var conf = require('./conf.json');
 var fs = require('fs');
+var shortid = require('shortid');
 
 test.cb('DirectLineAPI#getToken', t => {
     // t.deepEqual([1, 2], [1, 2]);
@@ -168,6 +169,7 @@ test.only.cb('DirectLineAPI#dialog', t => {
     // check out form data format
     // https://www.npmjs.com/package/request#multipartform-data-multipart-form-uploads
     var data = {};
+    var fromUser = shortid.generate();
     directLineAPI.getToken(conf.DIRECT_LINE_SECRET)
         .then(function(token) {
             return directLineAPI.createConversation(token);
@@ -176,12 +178,12 @@ test.only.cb('DirectLineAPI#dialog', t => {
             console.log('ask>> ' + JSON.stringify(result));
             data.token = result.token;
             data.conversationId = result.conversationId;
-            return directLineAPI.ask(result.token, result.conversationId, { text: 'bar' });
+            return directLineAPI.ask(result.token, result.conversationId, { text: 'bar', from: fromUser });
         })
         .then(function(result) {
             console.log('dialog-1', JSON.stringify(result));
             console.log('dialog-1:data', JSON.stringify(data))
-            return directLineAPI.ask(data.token, data.conversationId, { text: 'foo' });
+            return directLineAPI.ask(data.token, data.conversationId, { text: 'foo', from: fromUser });
         })
         .then(function(result) {
             console.log('dialog-2', JSON.stringify(result));
