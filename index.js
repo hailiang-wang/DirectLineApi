@@ -238,7 +238,8 @@ DirectLineClient.prototype.renewConversationToken = function(token, conversation
             error: err
         });
         if (response.statusCode === 200) {
-            return defer.resolve(body);
+            // there are "" in the body for token
+            return defer.resolve(body.slice(1, -1));
         } else {
             return defer.reject({
                 rc: 2,
