@@ -5,6 +5,8 @@ https://docs.botframework.com/en-us/restapi/directline/
 
 ## API
 
+> Check out test/test.js for samples.
+
 ```
 var client = require('directline-api');
 // get a token
@@ -14,7 +16,15 @@ client.getToken(secret);
 client.createConversation(token);
 
 // post a message in a conversation
-client.postMessage(token, conversationId, message);
+client.postMessage(token, conversationId, {
+                text: 'YOUR_TEXT'
+            });
+
+// post a message with an userId, userId is your unique id for message sender.
+client.ask(token, conversationId, {
+                        text: 'YOUR_TEXT',
+                        from: 'FROM_USERID'
+                    });
 
 // post a file in a conversation
 client.postFileMessage(token, conversationId, formData);
@@ -33,8 +43,6 @@ client.renewConversationToken(token, conversationId);
 client.ask(token, conversationId, body);
 
 ```
-
-> Check out test/test.js for samples.
 
 ## Run Test
 ```
