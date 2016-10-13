@@ -2,7 +2,8 @@
  * Direct Line API
  * https://docs.botframework.com/en-us/restapi/directline/
  */
-const baseUrl = "https://directline.botframework.com/api";
+const finalBaseUrl = "https://directline.botframework.com/api";
+var baseUrl = finalBaseUrl;
 var request = require('request');
 var Q = require('q');
 var leftpad = require('leftpad');
@@ -310,5 +311,11 @@ DirectLineClient.prototype.ask = function(token, conversationId, body) {
     return defer.promise;
 }
 
+DirectLineClient.prototype.setBaseUrl = function(newBaseUrl) {
+    baseUrl = newBaseUrl;
+}
 
+DirectLineClient.prototype.clearBaseUrl = function() {
+    baseUrl = finalBaseUrl;
+}
 exports = module.exports = new DirectLineClient();
