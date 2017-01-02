@@ -35,7 +35,7 @@ DirectLineClient.prototype.getToken = function(secret) {
         } else {
             return defer.reject({
                 rc: 2,
-                error: 'wrong status code.'
+                error: 'wrong status code ' + response.statusCode
             });
         }
     });
@@ -67,7 +67,7 @@ DirectLineClient.prototype.createConversation = function(token) {
         } else {
             return defer.reject({
                 rc: 2,
-                error: 'wrong status code.'
+                error: 'wrong status code ' + response.statusCode
             });
         }
     });
@@ -103,7 +103,7 @@ DirectLineClient.prototype.postMessage = function(token, conversationId, body) {
         } else {
             return defer.reject({
                 rc: 2,
-                error: 'wrong status code.'
+                error: 'wrong status code ' + response.statusCode
             });
         }
     });
@@ -138,7 +138,7 @@ DirectLineClient.prototype.postFileMessage = function(token, conversationId, for
         } else {
             return defer.reject({
                 rc: 2,
-                error: 'wrong status code.'
+                error: 'wrong status code ' + response.statusCode
             });
         }
     });
@@ -174,7 +174,7 @@ DirectLineClient.prototype.getMessages = function(token, conversationId, waterma
         } else {
             return defer.reject({
                 rc: 2,
-                error: 'wrong status code.'
+                error: 'wrong status code ' + response.statusCode
             });
         }
     });
@@ -208,7 +208,7 @@ DirectLineClient.prototype.generateConversationAndToken = function(secret) {
         } else {
             return defer.reject({
                 rc: 2,
-                error: 'wrong status code.'
+                error: 'wrong status code ' + response.statusCode
             });
         }
     });
@@ -242,7 +242,7 @@ DirectLineClient.prototype.renewConversationToken = function(token, conversation
         } else {
             return defer.reject({
                 rc: 2,
-                error: 'wrong status code.'
+                error: 'wrong status code ' + response.statusCode
             });
         }
     });
