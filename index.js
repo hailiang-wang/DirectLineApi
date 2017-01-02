@@ -2,13 +2,15 @@
  * Direct Line API
  * https://docs.botframework.com/en-us/restapi/directline/
  */
-const baseUrl = "https://directline.botframework.com/api";
+const finalBaseUrl = "https://directline.botframework.com/api";
 var request = require('request');
 var Q = require('q');
 var leftpad = require('leftpad');
 var debug = require('debug')('directline-api');
 
-function DirectLineClient() {}
+function DirectLineClient(customBaseUrl) {
+    this.baseUrl = customBaseUrl || finalBaseUrl;
+}
 
 /**
  * Get token
@@ -19,7 +21,7 @@ DirectLineClient.prototype.getToken = function(secret) {
     var defer = Q.defer();
     request({
         method: 'GET',
-        uri: baseUrl + '/tokens',
+        uri: this.baseUrl + '/tokens',
         headers: {
             'Authorization': 'BotConnector ' + secret
         }
@@ -50,7 +52,7 @@ DirectLineClient.prototype.createConversation = function(token) {
     var defer = Q.defer();
     request({
         method: 'POST',
-        uri: baseUrl + '/conversations',
+        uri: this.baseUrl + '/conversations',
         headers: {
             'Authorization': 'BotConnector ' + token,
             'Accept': 'application/json'
@@ -84,7 +86,7 @@ DirectLineClient.prototype.postMessage = function(token, conversationId, body) {
     var defer = Q.defer();
     request({
         method: 'POST',
-        uri: baseUrl + '/conversations/' + conversationId + '/messages',
+        uri: this.baseUrl + '/conversations/' + conversationId + '/messages',
         headers: {
             'Authorization': 'BotConnector ' + token,
             'Content-Type': 'application/json'
@@ -120,7 +122,7 @@ DirectLineClient.prototype.postFileMessage = function(token, conversationId, for
     var defer = Q.defer();
     request({
         method: 'POST',
-        uri: baseUrl + '/conversations/' + conversationId + '/upload',
+        uri: this.baseUrl + '/conversations/' + conversationId + '/upload',
         headers: {
             'Authorization': 'BotConnector ' + token,
             'Content-Type': 'multipart/form-data'
@@ -157,7 +159,7 @@ DirectLineClient.prototype.getMessages = function(token, conversationId, waterma
     var watermarkStr = watermark ? 'watermark=' + watermark : '';
     request({
         method: 'GET',
-        uri: baseUrl + '/conversations/' + conversationId + '/messages/?' + watermarkStr,
+        uri: this.baseUrl + '/conversations/' + conversationId + '/messages/?' + watermarkStr,
         headers: {
             'Authorization': 'BotConnector ' + token,
             'Accept': 'application/json'
@@ -192,7 +194,7 @@ DirectLineClient.prototype.generateConversationAndToken = function(secret) {
     var defer = Q.defer();
     request({
         method: 'POST',
-        uri: baseUrl + '/tokens/conversation',
+        uri: this.baseUrl + '/tokens/conversation',
         headers: {
             'Authorization': 'BotConnector ' + secret
         }
@@ -225,7 +227,7 @@ DirectLineClient.prototype.renewConversationToken = function(token, conversation
 
     request({
         method: 'GET',
-        uri: baseUrl + '/tokens/' + conversationId + '/renew',
+        uri: this.baseUrl + '/tokens/' + conversationId + '/renew',
         headers: {
             'Authorization': 'BotConnector ' + token
         }
@@ -310,5 +312,11 @@ DirectLineClient.prototype.ask = function(token, conversationId, body) {
     return defer.promise;
 }
 
+DirectLineClient.prototype.setBaseUrl = function(newBaseUrl) {
+    this.baseUrl = newBaseUrl;
+}
 
-exports = module.exports = new DirectLineClient();
+DirectLineClient.prototype.resetBaseUrl = function() {
+    this.baseUrl = finalBaseUrl;
+}
+exports = module.exports = DirectLineClient;
