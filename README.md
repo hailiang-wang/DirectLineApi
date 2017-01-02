@@ -3,6 +3,11 @@ The Direct Line API is a simple REST API for connecting directly to a single bot
 
 https://docs.botframework.com/en-us/restapi/directline/
 
+## Install
+```
+npm install directline-api
+```
+
 ## API
 
 > Check out test/test.js for samples.

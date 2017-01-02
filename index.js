@@ -41,7 +41,15 @@ DirectLineClient.prototype.getToken = function(secret) {
     });
 
     return defer.promise;
-};
+}
+
+DirectLineClient.prototype.setBaseUrl = function(newBaseUrl) {
+    this.baseUrl = newBaseUrl;
+}
+
+DirectLineClient.prototype.resetBaseUrl = function() {
+    this.baseUrl = finalBaseUrl;
+}
 
 /**
  * Create a conversation
@@ -73,7 +81,7 @@ DirectLineClient.prototype.createConversation = function(token) {
     });
 
     return defer.promise;
-};
+}
 
 /**
  * Post a message for a conversation
@@ -109,7 +117,7 @@ DirectLineClient.prototype.postMessage = function(token, conversationId, body) {
     });
 
     return defer.promise;
-};
+}
 
 /**
  * upload file
@@ -144,8 +152,7 @@ DirectLineClient.prototype.postFileMessage = function(token, conversationId, for
     });
 
     return defer.promise;
-};
-
+}
 
 /**
  * Get Messages for a conversation
@@ -180,7 +187,7 @@ DirectLineClient.prototype.getMessages = function(token, conversationId, waterma
     });
 
     return defer.promise;
-};
+}
 
 /**
  * generate a token for a new conversation.
@@ -214,7 +221,7 @@ DirectLineClient.prototype.generateConversationAndToken = function(secret) {
     });
 
     return defer.promise;
-};
+}
 
 /**
  * renew token by conversationId
@@ -248,7 +255,7 @@ DirectLineClient.prototype.renewConversationToken = function(token, conversation
     });
 
     return defer.promise;
-};
+}
 
 /**
  * [resolveNextConversationMessageId description]
@@ -312,11 +319,4 @@ DirectLineClient.prototype.ask = function(token, conversationId, body) {
     return defer.promise;
 }
 
-DirectLineClient.prototype.setBaseUrl = function(newBaseUrl) {
-    this.baseUrl = newBaseUrl;
-}
-
-DirectLineClient.prototype.resetBaseUrl = function() {
-    this.baseUrl = finalBaseUrl;
-}
 exports = module.exports = DirectLineClient;
